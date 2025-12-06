@@ -1,47 +1,9 @@
 <?php
 
-require_once '../models/User.php';
-require_once '../core/db.php';
+require_once '../controllers/RegisterController.php';
 
-$dbHelper = new Dbhelper();
-$connection = $dbHelper->getConnection();
-
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    if (isset($_POST['register'])) {
-
-        if (
-            empty($_POST['name']) ||
-            empty($_POST['lastname']) ||
-            empty($_POST['tel']) ||
-            empty($_POST['password']) ||
-            empty($_POST['username'])
-        ) {
-            die("All fields are required.");
-        }
-
-        $user = new User(
-            null,
-            $_POST['name'],
-            $_POST['lastname'],
-            $_POST['username'],
-            $_POST['tel'],
-            password_hash($_POST['password'], PASSWORD_DEFAULT),
-        );
-
-        $isAdded = $dbHelper->add_user($user);
-
-        if ($isAdded) {
-            echo "User registered successfully.";
-            header("Location: login.php");
-            exit();
-        } else {
-            echo "Error registering user.";
-        }
-    }
-}
-
+$controller = new RegisterController();
+$controller->register();
 
 ?>
 
@@ -52,12 +14,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styless.css">
 </head>
 
 <body>
 
-    <?php if (!empty($isAdded)) echo "<h1>" . $isAdded . "</h1>" ?>
+    <?php if (!empty($controller->message)) echo "<p>" . htmlspecialchars($controller->message) . "</p>" ?>
 
     <nav>
         <a href="index.php">Register</a>

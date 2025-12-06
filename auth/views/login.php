@@ -1,37 +1,20 @@
 <?php
-require_once '../core/db.php';
 
-$dbHelper = new Dbhelper();
-$connection = $dbHelper->getConnection();
+require_once '../controllers/LoginController.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+$controller = new LoginController();
 
-  if (isset($_POST['login'])) {
-
-    if (
-      empty($_POST['username']) ||
-      empty($_POST['password'])
-    ) {
-      die("All fields are required.");
-    }
-
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-
-    $isLoggedIn = $dbHelper->login($username, $password);
-
-    if ($isLoggedIn) {
-      $user = $dbHelper->get_user($username);
-      $name = $user['name'];
-      $lastname = $user['lastname'];
-      $tel = $user['tel'];
-      echo "Login successful.";
-    } else {
-      echo "Invalid username or password.";
-    }
-  }
+// Handle logout
+if (isset($_GET['action']) && $_GET['action'] === 'logout') {
+  $controller->logout();
 }
 
+// Handle login
+$controller->login();
+
+// Check if user is logged in
+$isLoggedIn = $controller->isUserLoggedIn();
+$userData = $controller->getUserData();
 
 ?>
 
@@ -44,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styless.css">
 </head>
 
 <body>
@@ -53,24 +36,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <a href="login.php">Login</a>
   </nav>
   <main>
-    <?php if (!isset($isLoggedIn) || !$isLoggedIn): ?>
+    <?php if (!empty($controller->message)): ?>
+      <p><?= $controller->message ?></p>
+    <?php endif; ?>
+
+    <?php if (!$isLoggedIn): ?>
       <form action="" method="post">
         <input type="text" name="username" placeholder="Username">
         <input type="password" name="password" placeholder="Password">
         <button type="submit" name="login">Login</button>
       </form>
-    <?php elseif ($isLoggedIn): ?>
+    <?php else: ?>
       <div class="profile-card">
-        <h2>Welcome, <?= $username ?></h2>
+        <h2>Welcome, <?= $userData['username'] ?></h2>
 
         <div class="info">
-          <div><strong>Name:</strong> <?= $name ?></div>
-          <div><strong>Last Name:</strong> <?= $lastname ?></div>
-          <div><strong>Username:</strong> @<?= $username ?></div>
-          <div><strong>Phone:</strong> <?= $tel ?></div>
+          <div><strong>Name:</strong> <?= $userData['name'] ?></div>
+          <div><strong>Last Name:</strong> <?= $userData['lastname'] ?></div>
+          <div><strong>Username:</strong> @<?= $userData['username'] ?></div>
+          <div><strong>Phone:</strong> <?= $userData['tel'] ?></div>
         </div>
 
-        <a class="logout-btn" href="login.php">Logout</a>
+        <a class="logout-btn" href="login.php?action=logout">Logout</a>
       </div>
     <?php endif; ?>
 
