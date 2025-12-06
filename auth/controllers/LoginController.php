@@ -10,7 +10,9 @@ class LoginController {
 
   public function __construct() {
     $this->dbHelper = new Dbhelper();
-    session_start();
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
   }
 
   public function login() {
@@ -24,9 +26,18 @@ class LoginController {
       $username = $_POST['username'];
       $password = $_POST['password'];
 
-      $this->isLoggedIn = $this->dbHelper->login($username, $password);
+      try {
+        $this->isLoggedIn = $this->dbHelper->login($username, $password);
+      } catch (\Throwable $th) {
+        $this->message = "An error occurred during login. Please try again later.";
+        error_log($th->getMessage());
+        return false;
+      }
 
       if ($this->isLoggedIn) {
+        // Security: Regenerate session ID to prevent session fixation
+        session_regenerate_id(true);
+
         $this->userData = $this->dbHelper->get_user($username);
         $_SESSION['logged_in'] = true;
         $_SESSION['username'] = $username;
@@ -43,8 +54,22 @@ class LoginController {
   }
 
   public function logout() {
-    session_start();
+    // Unset all session values
+    $_SESSION = [];
+    session_unset();
+
+    // Delete the session cookie
+    if (ini_get("session.use_cookies")) {
+        $params = session_get_cookie_params();
+        setcookie(session_name(), '', time() - 42000,
+            $params["path"], $params["domain"],
+            $params["secure"], $params["httponly"]
+        );
+    }
+
+    // Destroy the session
     session_destroy();
+    
     header("Location: login.php");
     exit();
   }

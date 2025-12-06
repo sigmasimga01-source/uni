@@ -31,10 +31,7 @@ $userData = $controller->getUserData();
 </head>
 
 <body>
-  <nav>
-    <a href="index.php">Register</a>
-    <a href="login.php">Login</a>
-  </nav>
+  <?php include 'partials/navbar.php'; ?>
   <main>
     <?php if (!empty($controller->message)): ?>
       <p><?= $controller->message ?></p>
