@@ -30,6 +30,7 @@ $userData = $auth->getUserData();
 
 <body>
   <?php include_once './partials/navbar.php'; ?>
+  <p style="color: green; text-align: center;"><?= $auth->getMessage() ?></p>
   <div class="profile-card">
     <h2>Welcome, <?= $userData['username'] ?></h2>
     <div class="info">

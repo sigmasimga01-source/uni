@@ -13,6 +13,11 @@ $auth->login();
 // Check if user is logged in
 $isLoggedIn = $auth->isUserLoggedIn();
 
+if ($isLoggedIn) {
+  header('Location: profile.php');
+  exit();
+}
+
 ?>
 
 
@@ -32,17 +37,11 @@ $isLoggedIn = $auth->isUserLoggedIn();
   <main>
     <p style="color: red;"><?= $auth->getMessage() ?></p>
 
-    <?php if (!$isLoggedIn): ?>
-      <form action="" method="post">
-        <input type="text" name="username" placeholder="Username">
-        <input type="password" name="password" placeholder="Password">
-        <button type="submit" name="login">Login</button>
-      </form>
-    <?php elseif ($isLoggedIn):
-      header('Location: profile.php');
-      exit();
-    ?>
-    <?php endif; ?>
+    <form action="" method="post">
+      <input type="text" name="username" placeholder="Username">
+      <input type="password" name="password" placeholder="Password">
+      <button type="submit" name="login">Login</button>
+    </form>
   </main>
 </body>
 

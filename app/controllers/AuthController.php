@@ -6,7 +6,6 @@ class AuthController {
   private $isLoggedIn = false;
   private $userData = null;
   protected $authService;
-  private $message = '';
 
   public function __construct() {
     $this->authService = new AuthService();
@@ -23,7 +22,7 @@ class AuthController {
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
 
       if (empty($_POST['username']) || empty($_POST['password'])) {
-        $this->message = "All fields are required.";
+        $_SESSION['msg'] = "All fields are required.";
         return false;
       }
 
@@ -35,12 +34,11 @@ class AuthController {
       if ($this->isLoggedIn) {
         $this->userData = $this->authService->get_user($username);
         $_SESSION['logged_in'] = true;
-        $_SESSION['username'] = $username;
         $_SESSION['user_data'] = $this->userData;
-        $this->message = "Login successful.";
+        $_SESSION['msg'] = "Login successful.";
         return true;
       } else {
-        $this->message = "Invalid username or password.";
+        $_SESSION['msg'] = "Invalid username or password.";
         return false;
       }
     }
@@ -76,7 +74,7 @@ class AuthController {
         empty($_POST['password']) ||
         empty($_POST['username'])
       ) {
-        $this->message = "All fields are required.";
+        $_SESSION['msg'] = "All fields are required.";
         return false;
       }
 
@@ -92,16 +90,16 @@ class AuthController {
       try {
         $isAdded = $this->authService->add_user($user);
       } catch (\Throwable $th) {
-        $this->message = "Error: " . $th->getMessage();
+        $_SESSION['msg'] = "Error: " . $th->getMessage();
         return false;
       }
 
       if ($isAdded) {
-        $this->message = "User registered successfully.";
+        $_SESSION['msg'] = "User registered successfully.";
         header("Location: login.php");
         exit();
       } else {
-        $this->message = "Error registering user.";
+        $_SESSION['msg'] = "Error registering user.";
       }
 
       return $isAdded;
@@ -111,6 +109,11 @@ class AuthController {
   }
 
   public function getMessage() {
-    return $this->message;
+    if (isset($_SESSION['msg'])) {
+      $message = $_SESSION['msg'];
+      unset($_SESSION['msg']);
+      return $message;
+    }
+    return '';
   }
 }
