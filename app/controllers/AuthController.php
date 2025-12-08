@@ -1,12 +1,23 @@
 <?php
-require_once __DIR__ . '/Controller.php';
-require_once __DIR__ . '/../core/db.php';
+require_once __DIR__ . '/../services/AuthService.php';
 require_once __DIR__ . '/../models/User.php';
-
-class AuthController extends Controller {
+class AuthController {
 
   private $isLoggedIn = false;
   private $userData = null;
+  protected $authService;
+  private $message = '';
+
+  public function __construct() {
+    $this->authService = new AuthService();
+    if (session_status() === PHP_SESSION_NONE) {
+      session_start();
+    }
+    if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
+      $this->isLoggedIn = true;
+      $this->userData = $_SESSION['user_data'];
+    }
+  }
 
   public function login() {
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
@@ -19,10 +30,10 @@ class AuthController extends Controller {
       $username = $_POST['username'];
       $password = $_POST['password'];
 
-      $this->isLoggedIn = $this->dbh->login($username, $password);
+      $this->isLoggedIn = $this->authService->login($username, $password);
 
       if ($this->isLoggedIn) {
-        $this->userData = $this->dbh->get_user($username);
+        $this->userData = $this->authService->get_user($username);
         $_SESSION['logged_in'] = true;
         $_SESSION['username'] = $username;
         $_SESSION['user_data'] = $this->userData;
@@ -79,7 +90,7 @@ class AuthController extends Controller {
       );
 
       try {
-        $isAdded = $this->dbh->add_user($user);
+        $isAdded = $this->authService->add_user($user);
       } catch (\Throwable $th) {
         $this->message = "Error: " . $th->getMessage();
         return false;
