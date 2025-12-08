@@ -1,8 +1,8 @@
 <?php
 
-require_once '../controllers/LoginController.php';
+require_once '../controllers/AuthController.php';
 
-$controller = new LoginController();
+$controller = new AuthController();
 
 // Handle logout
 if (isset($_GET['action']) && $_GET['action'] === 'logout') {

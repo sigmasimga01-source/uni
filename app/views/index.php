@@ -1,8 +1,8 @@
 <?php
 
-require_once '../controllers/RegisterController.php';
+require_once '../controllers/AuthController.php';
 
-$controller = new RegisterController();
+$controller = new AuthController();
 $controller->register();
 
 ?>
