@@ -2,14 +2,12 @@
 
 require_once '../app.php';
 
-// Handle logout
 if (isset($_GET['action']) && $_GET['action'] === 'logout') {
   $auth->logout();
   header('Location: login.php');
   exit();
 }
 
-// Check if user is logged in
 $isLoggedIn = $auth->isLoggedIn();
 if (!$isLoggedIn) {
   header('Location: login.php');
