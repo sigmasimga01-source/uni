@@ -46,7 +46,13 @@ class PostController {
       $allPosts = $this->postService->get_all_posts();
       foreach ($allPosts as $post) {
         if ($post['post_id'] == $postId) {
-          return $post;
+          return new Post(
+            $post['post_id'],
+            $post['user_id'],
+            $post['title'],
+            $post['content'],
+            $post['created_at']
+          );
         }
       }
       return null;
@@ -85,7 +91,7 @@ class PostController {
     $title = $_POST['title'];
     $content = $_POST['content'];
 
-    $post = new Post(null, $userId, $title, $content);
+    $post = new Post(null, null, $userId, $title, $content);
 
     if ($this->postService->add_post($post)) {
       $this->message = "Post created successfully!";

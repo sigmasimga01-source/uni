@@ -11,7 +11,7 @@ if (!$post) {
 <!DOCTYPE html>
 <html lang="en">
 <?php
-$name = "Post - " . $post['title'];
+$name = "Post - " . $post->getTitle();
 include '../_partials/header.php';
 ?>
 
@@ -25,19 +25,19 @@ include '../_partials/header.php';
         
         <article class="post-detail">
             <header class="post-header">
-                <h1><?= htmlspecialchars($post['title']) ?></h1>
+                <h1><?= htmlspecialchars($post->getTitle()) ?></h1>
                 <div class="post-meta">
                     <span class="author">
-                        <i class="fas fa-user"></i> @<?= htmlspecialchars($post['username']) ?>
+                        <i class="fas fa-user"></i> @<?= htmlspecialchars($post->getOwner()) ?>
                     </span>
                     <span class="date">
-                        <i class="far fa-calendar-alt"></i> <?= date('F j, Y', strtotime($post['created_at'])) ?>
+                        <i class="far fa-calendar-alt"></i> <?= date('F j, Y', strtotime($post->getCreatedAt())) ?>
                     </span>
                 </div>
             </header>
             
             <div class="post-content">
-                <?= nl2br(htmlspecialchars($post['content'])) ?>
+                <?= nl2br(htmlspecialchars($post->getContent())) ?>
             </div>
         </article>
     </div>

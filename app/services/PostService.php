@@ -24,6 +24,7 @@ class PostService extends Dbh {
     $query = "
       SELECT 
         posts.post_id,
+        posts.user_id,
         posts.title,
         posts.content,
         posts.created_at,
