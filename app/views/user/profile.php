@@ -76,7 +76,7 @@ include_once '../_partials/header.php'; ?>
       <input type="text" name="newname" id="newname" placeholder="New Name" value="<?= ($user->getName()) ?>">
       <input type="text" name="newlastname" id="newlastname" placeholder="New Last Name" value="<?= ($user->getLastname()) ?>">
       <input type="text" name="newtel" id="newtel" placeholder="New Telephone" value="<?= ($user->getTel()) ?>">
-      <input type="submit" name="update_profile" value="Change Name">
+      <input type="submit" name="update_profile" value="Update">
     </form>
 
   </div>
