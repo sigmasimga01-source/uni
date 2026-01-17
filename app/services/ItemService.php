@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../core/db.php';
+require_once __DIR__ . '/../models/Item.php';
 
 class ItemService extends Dbh {
 
@@ -10,7 +11,14 @@ class ItemService extends Dbh {
     $items = [];
     if ($result->num_rows > 0) {
       while ($row = $result->fetch_assoc()) {
-        $items[] = $row;
+        $items[] = new Item(
+          $row['item_id'],
+          $row['name'],
+          $row['description'],
+          $row['price'],
+          $row['stock'],
+          $row['image'] ?? null
+        );
       }
     }
     return $items;
@@ -24,9 +32,16 @@ class ItemService extends Dbh {
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-      $item = $result->fetch_assoc();
+      $row = $result->fetch_assoc();
       $stmt->close();
-      return $item;
+      return new Item(
+        $row['item_id'],
+        $row['name'],
+        $row['description'],
+        $row['price'],
+        $row['stock'],
+        $row['image'] ?? null
+      );
     }
 
     $stmt->close();
@@ -44,7 +59,14 @@ class ItemService extends Dbh {
 
     $items = [];
     while ($row = $result->fetch_assoc()) {
-      $items[] = $row;
+      $items[] = new Item(
+        $row['item_id'],
+        $row['name'],
+        $row['description'],
+        $row['price'],
+        $row['stock'],
+        $row['image'] ?? null
+      );
     }
     $stmt->close();
     return $items;
@@ -75,7 +97,14 @@ class ItemService extends Dbh {
     $items = [];
     if ($result->num_rows > 0) {
       while ($row = $result->fetch_assoc()) {
-        $items[] = $row;
+        $items[] = new Item(
+          $row['item_id'],
+          $row['name'],
+          $row['description'],
+          $row['price'],
+          $row['stock'],
+          $row['image'] ?? null
+        );
       }
     }
     return $items;

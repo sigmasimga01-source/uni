@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
 
   if (isset($_POST['checkout'])) {
-    $order_id = $cart->checkout($user_id);
+    $order_id = $orders->checkout($user_id);
     if ($order_id) {
       header('Location: orders');
       exit();
@@ -59,7 +59,7 @@ include_once '../_partials/header.php'; ?>
     <h1 class="page-title">Shopping Cart</h1>
 
     <?php
-    $response = $cart->getResponse();
+    $response = $cart->getResponse() ?: $orders->getResponse();
     if (!empty($response)):
     ?>
       <div class="response" style="background-color: orange;">
@@ -91,20 +91,20 @@ include_once '../_partials/header.php'; ?>
             <?php foreach ($cartItems as $item): ?>
               <tr>
                 <td>
-                  <strong><?= $item['name'] ?></strong>
+                  <strong><?= $item->getItemName() ?></strong>
                 </td>
-                <td>$<?= $item['price'] ?></td>
+                <td>$<?= $item->getItemPrice() ?></td>
                 <td>
                   <form action="" method="post" class="quantity-control" style="display: inline-flex; padding: 0; box-shadow: none; margin: 0;">
-                    <input type="hidden" name="item_id" value="<?= $item['item_id'] ?>">
-                    <input type="number" name="quantity" style="margin-bottom: 0;" value="<?= $item['quantity'] ?>" min="1" max=<?= $item['stock'] ?>>
+                    <input type="hidden" name="item_id" value="<?= $item->getItemId() ?>">
+                    <input type="number" name="quantity" style="margin-bottom: 0;" value="<?= $item->getQuantity() ?>" min="1" max=<?= $item->getItemStock() ?>>
                     <button type="submit" name="update_quantity" class="btn btn-small btn-primary">Update</button>
                   </form>
                 </td>
-                <td>$<?= $item['price'] * $item['quantity'] ?></td>
+                <td>$<?= $item->getItemPrice() * $item->getQuantity() ?></td>
                 <td>
                   <form action="" method="post" style="display: inline; padding: 0; box-shadow: none; margin: 0;">
-                    <input type="hidden" name="item_id" value="<?= $item['item_id'] ?>">
+                    <input type="hidden" name="item_id" value="<?= $item->getItemId() ?>">
                     <button type="submit" name="remove_item" class="btn btn-small btn-danger">Remove</button>
                   </form>
                 </td>

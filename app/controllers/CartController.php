@@ -60,51 +60,6 @@ class CartController {
     return $this->cartService->get_cart_count();
   }
 
-  public function checkout($user_id) {
-    $result = $this->cartService->checkout($user_id);
-
-    if (is_array($result)) {
-      if ($result['success']) {
-        $_SESSION['cart_res'] = "order placed: Order #" . $result['order_id'];
-        return $result['order_id'];
-      } else {
-        if ($result['error'] === 'low_balance') {
-          $_SESSION['cart_res'] = "low balance. need $" 
-                                  . $result['total'] 
-                                  . " but only have $" 
-                                  . $result['balance'] 
-                                  . ". Hack Pentagon for money";
-          header('Location: cart');
-          exit();
-        } else {
-          $_SESSION['cart_res'] = "failed. Cart is empty.";
-        }
-        return false;
-      }
-    }
-
-    $_SESSION['cart_res'] = "failed.";
-    return false;
-  }
-
-  public function getOrders($user_id) {
-    return $this->cartService->get_orders($user_id);
-  }
-
-  public function getAllOrders() {
-    return $this->cartService->get_all_orders();
-  }
-
-  public function updateOrderStatus($order_id, $status) {
-    $result = $this->cartService->update_order_status($order_id, $status);
-    if ($result) {
-      $_SESSION['cart_res'] = "order updated";
-    } else {
-      $_SESSION['cart_res'] = "failed to update order";
-    }
-    return $result;
-  }
-
   public function getResponse() {
     return $this->response;
   }

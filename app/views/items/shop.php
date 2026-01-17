@@ -65,22 +65,22 @@ include_once '../_partials/header.php'; ?>
         <?php foreach ($allItems as $item): ?>
           <div class="product-card">
             <div class="product-image">
-              <?php if (!empty($item['image'])): ?>
-                <img src="<?= $item['image'] ?>" alt="<?= $item['name'] ?>">
+              <?php if (!empty($item->getImage())): ?>
+                <img src="<?= $item->getImage() ?>" alt="<?= $item->getName() ?>">
               <?php else: ?>
                 📦
               <?php endif; ?>
             </div>
             <div class="product-info">
-              <div class="product-name"><?= $item['name'] ?></div>
-              <div class="product-description"><?= $item['description'] ?? '' ?></div>
-              <div class="product-price">$<?= number_format($item['price'], 2) ?></div>
-              <div class="product-stock">In stock: <?= $item['stock'] ?></div>
+              <div class="product-name"><?= $item->getName() ?></div>
+              <div class="product-description"><?= $item->getDescription() ?? '' ?></div>
+              <div class="product-price">$<?= number_format($item->getPrice(), 2) ?></div>
+              <div class="product-stock">In stock: <?= $item->getStock() ?></div>
 
               <?php if ($auth->isLoggedIn()): ?>
                 <form action="" method="post" class="product-add">
-                  <input type="hidden" name="item_id" value="<?= $item['item_id'] ?>">
-                  <input type="number" name="quantity" value="1" min="1" max="<?= $item['stock'] ?>" style="width: 60px; padding: 8px; margin: 0;">
+                  <input type="hidden" name="item_id" value="<?= $item->getItemId() ?>">
+                  <input type="number" name="quantity" value="1" min="1" max="<?= $item->getStock() ?>" style="width: 60px; padding: 8px; margin: 0;">
                   <button type="submit" name="add_to_cart" class="btn btn-success">Add to Cart</button>
                 </form>
               <?php else: ?>

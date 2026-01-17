@@ -8,7 +8,7 @@ if (!$auth->isLoggedIn()) {
 }
 
 $user_id = $auth->getUserId();
-$orders = $cart->getOrders($user_id);
+$userOrders = $orders->getOrders($user_id);
 
 ?>
 
@@ -25,7 +25,7 @@ include_once '../_partials/header.php'; ?>
     <h1 class="page-title">My Orders</h1>
 
     <?php
-    $response = $cart->getResponse();
+    $response = $orders->getResponse();
     if (!empty($response)):
     ?>
       <div class="response success">
@@ -33,7 +33,7 @@ include_once '../_partials/header.php'; ?>
       </div>
     <?php endif; ?>
 
-    <?php if (empty($orders)): ?>
+    <?php if (empty($userOrders)): ?>
       <div class="cart-container">
         <div class="cart-empty">
           <h3>No orders yet</h3>
@@ -43,18 +43,18 @@ include_once '../_partials/header.php'; ?>
       </div>
     <?php else: ?>
       <div class="orders-list">
-        <?php foreach ($orders as $order): ?>
+        <?php foreach ($userOrders as $order): ?>
           <div class="order-item">
             <div>
-              <span class="order-id">Order #<?= $order['order_id'] ?></span>
+              <span class="order-id">Order #<?= $order->getOrderId() ?></span>
               <br>
-              <small style="color: #7f8c8d;"><?= date('F j, Y, g:i a', strtotime($order['created_at'])) ?></small>
+              <small style="color: gray;"><?= $order->getCreatedAt() ?></small>
             </div>
             <div>
-              <strong style="font-size: 1.2rem; color: #27ae60;">$<?= number_format($order['total'], 2) ?></strong>
+              <strong style="font-size: 1.2rem; color: green;">$<?= $order->getTotal() ?></strong>
             </div>
             <div>
-              <span class="order-status <?= $order['status'] ?>"><?= ucfirst($order['status']) ?></span>
+              <span class="order-status <?= $order->getStatus() ?>"><?= $order->getStatus() ?></span>
             </div>
           </div>
         <?php endforeach; ?>

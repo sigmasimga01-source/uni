@@ -17,18 +17,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
   $order_id = $_POST['order_id'];
   $status = $_POST['status'];
 
-  if (in_array($status, ['pending', 'completed', 'cancelled'])) {
-    $cart->updateOrderStatus($order_id, $status);
+  if ($status) {
+    $orders->updateOrderStatus($order_id, $status);
   }
   header('Location: orders');
   exit();
 }
 
-$allOrders = $cart->getAllOrders();
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_order'])) {
+  $order_id = $_POST['order_id'];
 
-$pendingCount = count(array_filter($allOrders, fn($order) => $order['status'] === 'pending'));
-$completedCount = count(array_filter($allOrders, fn($order) => $order['status'] === 'completed'));
-$cancelledCount = count(array_filter($allOrders, fn($order) => $order['status'] === 'cancelled'));
+  if ($order_id) {
+    $orders->deleteOrder($order_id);
+  }
+  header('Location: orders');
+  exit();
+}
+
+$allOrders = $orders->getAllOrders();
+
+$pendingCount = count(array_filter($allOrders, fn($order) => $order->getStatus() === 'pending'));
+$completedCount = count(array_filter($allOrders, fn($order) => $order->getStatus() === 'completed'));
+$cancelledCount = count(array_filter($allOrders, fn($order) => $order->getStatus() === 'cancelled'));
 
 ?>
 
@@ -47,7 +57,7 @@ include_once '../_partials/header.php'; ?>
     <?php $a=2; include_once './_partials/tabs.php' ?>
 
     <?php
-      $response = $cart->getResponse();
+      $response = $orders->getResponse();
       if (!empty($response)):
     ?>
       <div class="response success">
@@ -69,35 +79,36 @@ include_once '../_partials/header.php'; ?>
           <?php foreach ($allOrders as $order): ?>
             <div class="order-item admin-order">
               <div class="order-details">
-                <span class="order-id">Order #<?= $order['order_id'] ?></span>
+                <span class="order-id">Order #<?= $order->getOrderId() ?></span>
                 <br>
                 <small style="color: gray;">
-                  <?= $order['created_at'] ?>
+                  <?= $order->getCreatedAt() ?>
                 </small>
                 <br>
                 <small style="color: blue;">
-                  Customer: <?= $order['username'] ?> (<?= $order['email'] ?>)
+                  Customer: <?= $order->getUsername() ?> (<?= $order->getEmail() ?>)
                 </small>
               </div>
               <div>
                 <strong style="font-size: 1.2rem; color: green;">
-                  $<?= number_format($order['total'], 2) ?>
+                  $<?= number_format($order->getTotal(), 2) ?>
                 </strong>
               </div>
               <div>
-                <span class="order-status <?= $order['status'] ?>">
-                  <?= ucfirst($order['status']) ?>
+                <span class="order-status <?= $order->getStatus() ?>">
+                  <?= ucfirst($order->getStatus()) ?>
                 </span>
               </div>
               <div>
                 <form method="POST" class="status-form">
-                  <input type="hidden" name="order_id" value="<?= $order['order_id'] ?>">
+                  <input type="hidden" name="order_id" value="<?= $order->getOrderId() ?>">
                   <select name="status" class="status-select">
-                    <option value="pending" <?= $order['status'] === 'pending' ? 'selected' : '' ?>>Pending</option>
-                    <option value="completed" <?= $order['status'] === 'completed' ? 'selected' : '' ?>>Completed</option>
-                    <option value="cancelled" <?= $order['status'] === 'cancelled' ? 'selected' : '' ?>>Cancelled</option>
+                    <option value="pending" <?= $order->getStatus() === 'pending' ? 'selected' : '' ?>>Pending</option>
+                    <option value="completed" <?= $order->getStatus() === 'completed' ? 'selected' : '' ?>>Completed</option>
+                    <option value="cancelled" <?= $order->getStatus() === 'cancelled' ? 'selected' : '' ?>>Cancelled</option>
                   </select>
                   <button type="submit" name="update_status" class="btn btn-primary btn-small">Update</button>
+                  <button type="submit" name="delete_order" class="btn btn-danger btn-small">Delete</button>
                 </form>
               </div>
             </div>
