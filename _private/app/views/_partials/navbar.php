@@ -50,7 +50,7 @@ $isLoggedIn = $auth->isLoggedIn();
     ?>
 
     <a href="<?= $base . $route['path'] ?>">
-      <?= htmlspecialchars($route['label']) ?>
+      <?= $route['label'] ?>
     </a>
   <?php endforeach; ?>
 </nav>

@@ -16,8 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
 <body>
 
   <?php 
-    $message = $auth->getMessage();
-    if (!empty($message)) echo "<p>" . $message . "</p>";
+    $response = $auth->getMessage();
+    if (!empty($response)) echo "<p>" . $response . "</p>";
   ?>
 
   <?php include_once '../_partials/navbar.php'; ?>

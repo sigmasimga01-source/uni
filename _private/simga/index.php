@@ -30,7 +30,7 @@ if (isset($_POST['sub'])) {
     // If updating an existing product
     if (isset($_GET['update'])) {
         echo "Updating now...";
-        $db->updateProduct((int)$_GET['update'], $name, $size, $barcode);
+        $db->updateProduct($_GET['update'], $name, $size, $barcode);
     } else {
         // Adding a new product
         echo "Adding new product...";
@@ -47,7 +47,7 @@ if (isset($_POST['sub'])) {
 
 // 🗑 Handle delete
 if (isset($_GET['id']) && isset($_GET['up'])) {
-    $id = (int)$_GET['id'];
+    $id = $_GET['id'];
     $db->deleteProduct($id);
     $allProducts = $db->getAllProducts();
 }
