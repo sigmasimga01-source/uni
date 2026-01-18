@@ -30,7 +30,13 @@ class CartService extends Dbh {
     if (empty($_SESSION['cart'])) {
       return $cart;
     }
-
+    // 
+    // $_SESSION['cart']:
+    // [ item_id => quantity ]:
+    // [  
+    //   6 => 2,
+    //   9 => 1 
+    // ]
     foreach ($_SESSION['cart'] as $item_id => $quantity) {
       $query = "SELECT item_id, name, description, price, stock, image FROM items WHERE item_id = ?";
       $stmt = $this->connection->prepare($query);
@@ -74,9 +80,9 @@ class CartService extends Dbh {
   }
 
   public function get_cart_total() {
-    $cart = $this->get_cart();
+    $cartItems = $this->get_cart();
     $total = 0;
-    foreach ($cart as $cartItem) {
+    foreach ($cartItems as $cartItem) {
       $total += $cartItem->getItem()->getPrice() * $cartItem->getQuantity();
     }
     return $total;
