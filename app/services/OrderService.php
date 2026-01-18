@@ -12,8 +12,8 @@ class OrderService extends Dbh {
 
     // calculate total
     $total = 0;
-    foreach ($cart as $item) {
-      $total += $item->getItemPrice() * $item->getQuantity();
+    foreach ($cart as $cartItem) {
+      $total += $cartItem->getItem()->getPrice() * $cartItem->getQuantity();
     }
 
     // check user balance
@@ -50,12 +50,12 @@ class OrderService extends Dbh {
     $stmt->close();
 
     // insert order items and update stock
-    foreach ($cart as $item) {
+    foreach ($cart as $cartItem) {
       $query = "INSERT INTO order_items (order_id, item_id, quantity, price) VALUES (?, ?, ?, ?)";
       $stmt = $this->connection->prepare($query);
-      $itemId = $item->getItemId();
-      $quantity = $item->getQuantity();
-      $price = $item->getItemPrice();
+      $itemId = $cartItem->getItem()->getItemId();
+      $quantity = $cartItem->getQuantity();
+      $price = $cartItem->getItem()->getPrice();
       $stmt->bind_param("iiid", $order_id, $itemId, $quantity, $price);
       $stmt->execute();
       $stmt->close();

@@ -206,7 +206,7 @@ class AuthController {
   public function addBalance($amount) {
     $result = $this->authService->add_balance($this->getUserId(), $amount);
     if ($result) {
-      // Refresh user data
+      // refresh user data
       $userData = $this->authService->get_user_by_id($this->getUserId());
       $this->user = new User(
         $userData['user_id'],

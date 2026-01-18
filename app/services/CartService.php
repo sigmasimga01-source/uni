@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../core/db.php';
 require_once __DIR__ . '/../models/Cart.php';
+require_once __DIR__ . '/../models/Item.php';
 
 class CartService extends Dbh {
 
@@ -31,22 +32,23 @@ class CartService extends Dbh {
     }
 
     foreach ($_SESSION['cart'] as $item_id => $quantity) {
-      $query = "SELECT item_id, name, price, stock FROM items WHERE item_id = ?";
+      $query = "SELECT item_id, name, description, price, stock, image FROM items WHERE item_id = ?";
       $stmt = $this->connection->prepare($query);
       $stmt->bind_param("i", $item_id);
       $stmt->execute();
       $result = $stmt->get_result();
       
-      $item = $result->fetch_assoc();
-      if ($item) {
-        $cart[] = new Cart(
-          $item['item_id'],
-          $quantity,
-          null,
-          $item['name'],
-          $item['price'],
-          $item['stock']
+      $row = $result->fetch_assoc();
+      if ($row) {
+        $item = new Item(
+          $row['item_id'],
+          $row['name'],
+          $row['description'],
+          $row['price'],
+          $row['stock'],
+          $row['image'] ?? null
         );
+        $cart[] = new Cart($item, $quantity);
       }
       $stmt->close();
     }
@@ -74,8 +76,8 @@ class CartService extends Dbh {
   public function get_cart_total() {
     $cart = $this->get_cart();
     $total = 0;
-    foreach ($cart as $item) {
-      $total += $item->getItemPrice() * $item->getQuantity();
+    foreach ($cart as $cartItem) {
+      $total += $cartItem->getItem()->getPrice() * $cartItem->getQuantity();
     }
     return $total;
   }

@@ -44,11 +44,11 @@ CREATE TABLE IF NOT EXISTS order_items (
 );
 
 INSERT INTO items (name, description, price, stock, image) VALUES
-('Laptop', 'High-performance laptop with 16GB RAM', 999.99, 10, 'https://pngimg.com/uploads/laptop/laptop_PNG101811.png'),
-('Smartphone', 'Latest smartphone with great camera', 699.99, 25, 'https://pngimg.com/uploads/smartphone/smartphone_PNG8501.png'),
-('Headphones', 'Wireless noise-cancelling headphones', 199.99, 50, 'https://pngimg.com/uploads/headphones/headphones_PNG7627.png'),
-('Keyboard', 'Mechanical gaming keyboard RGB', 89.99, 30, 'https://pngimg.com/uploads/keyboard/keyboard_PNG101839.png'),
-('Mouse', 'Ergonomic wireless mouse', 49.99, 40, 'https://pngimg.com/uploads/computer_mouse/computer_mouse_PNG7664.png'),
+('Laptop', 'laptop with 16GB RAM', 999.99, 10, 'https://pngimg.com/uploads/laptop/laptop_PNG101811.png'),
+('Smartphone', 'latest smartphone', 699.99, 25, 'https://pngimg.com/uploads/smartphone/smartphone_PNG8501.png'),
+('Headphones', 'Wireless headphones', 199.99, 50, 'https://pngimg.com/uploads/headphones/headphones_PNG7627.png'),
+('Keyboard', 'gaming keyboard RGB', 89.99, 30, 'https://pngimg.com/uploads/keyboard/keyboard_PNG101839.png'),
+('Mouse', 'wireless mouse', 49.99, 40, 'https://pngimg.com/uploads/computer_mouse/computer_mouse_PNG7664.png'),
 ('Monitor', '27 inch 4K monitor', 449.99, 15, 'https://pngimg.com/uploads/monitor/laptop_PNG5872.png'),
-('USB Cable', 'USB-C cable 2m', 9.99, 100, 'https://pngimg.com/uploads/usb_cable/usb_cable_PNG5.png'),
-('Webcam', 'HD webcam for video calls', 79.99, 20, 'https://pngimg.com/uploads/web_camera/web_camera_PNG101403.png');
+('USB Cable', 'USB-C cable', 9.99, 100, 'https://pngimg.com/uploads/usb_cable/usb_cable_PNG5.png'),
+('Webcam', 'HD webcam', 79.99, 20, 'https://pngimg.com/uploads/web_camera/web_camera_PNG101403.png');
