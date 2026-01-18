@@ -14,7 +14,7 @@ include_once './_partials/header.php'; ?>
   <?php include_once './_partials/navbar.php'; ?>
 
   <main>
-    <h1 class="page-title">Welcome to Shop</h1>
+    <h1 class="page-title">Welcome to ScamShop</h1>
 
     <?php if ($auth->isLoggedIn()): ?>
       <p>Hello, <strong><?= $auth->getUser()->getName() ?></strong>! Ready to shop?</p>

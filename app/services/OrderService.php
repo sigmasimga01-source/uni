@@ -49,16 +49,8 @@ class OrderService extends Dbh {
     $order_id = $this->connection->insert_id;
     $stmt->close();
 
-    // insert order items and update stock
+    // update stock
     foreach ($cart as $cartItem) {
-      $query = "INSERT INTO order_items (order_id, item_id, quantity, price) VALUES (?, ?, ?, ?)";
-      $stmt = $this->connection->prepare($query);
-      $itemId = $cartItem->getItem()->getItemId();
-      $quantity = $cartItem->getQuantity();
-      $price = $cartItem->getItem()->getPrice();
-      $stmt->bind_param("iiid", $order_id, $itemId, $quantity, $price);
-      $stmt->execute();
-      $stmt->close();
 
       $query = "UPDATE items SET stock = stock - ? WHERE item_id = ?";
       $stmt = $this->connection->prepare($query);

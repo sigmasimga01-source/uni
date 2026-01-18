@@ -33,16 +33,6 @@ CREATE TABLE IF NOT EXISTS orders (
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS order_items (
-    order_item_id INT AUTO_INCREMENT PRIMARY KEY,
-    order_id INT NOT NULL,
-    item_id INT NOT NULL,
-    quantity INT NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE,
-    FOREIGN KEY (item_id) REFERENCES items(item_id) ON DELETE CASCADE
-);
-
 INSERT INTO items (name, description, price, stock, image) VALUES
 ('Laptop', 'laptop with 16GB RAM', 999.99, 10, 'https://pngimg.com/uploads/laptop/laptop_PNG101811.png'),
 ('Smartphone', 'latest smartphone', 699.99, 25, 'https://pngimg.com/uploads/smartphone/smartphone_PNG8501.png'),

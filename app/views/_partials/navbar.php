@@ -8,7 +8,7 @@ $isAdmin = $isLoggedIn && $auth->getUser()->getRole() === 'admin';
 ?>
 
 <nav>
-  <a href="<?= $base ?>" class="nav-brand">🛒 Shop</a>
+  <a href="<?= $base ?>" class="nav-brand">🛒 ScamShop</a>
   <div>
     <?php foreach ($routes as $key => $route): ?>
       <?php
